@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CRM">
+    <meta name="author" content="Vorkov">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Registration</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
+    <!-- Bootstrap core CSS -->
+    <link href="/styles/styles.css" rel="stylesheet"/>
+    <!-- Custom styles for this template -->
+    <link href="/styles/signin.css" rel="stylesheet">
+</head>
+
+<body class>
+<main class="form-registration">
+    <div class="text-center">
+        <img class="mb-4" src="/images/crm_sign_up.png" alt="logo" width="72" height="72">
+        <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+    </div>
+    <div class="banner form-registration ">
+        <div class="container-md, text-left">
+            <form class="row g-6" th:method="post" th:action="@{/registration}" th:object="${user}">
+                <div class="col-md-12, p-bot">
+                    <label for="inputFirstName" class="form-label">First Name</label>
+                    <input type="text" th:field="*{name}" class="form-control" id="inputFirstName" placeholder="David">
+                </div>
+                <div class="col-md-12, p-bot">
+                    <label for="inputLastName" class="form-label">Last Name</label>
+                    <input type="text" th:field="*{surname}" class="form-control" id="inputLastName"
+                           placeholder="Jones">
+                </div>
+                <div class="col-md-12, p-bot">
+                    <label for="inputEmail" class="form-label">Email</label>
+                    <input type="email" th:field="*{email}" class="form-control" id="inputEmail"
+                           placeholder="Example@mail.com">
+                </div>
+                <div class="col-md-12, p-bot">
+                    <label for="inputPassword" class="form-label">Password</label>
+                    <input type="password" th:field="*{password}" class="form-control" id="inputPassword"
+                           placeholder="At least 8 symbols">
+                </div>
+                <div class="col-md-12, p-bot">
+                    <label for="inputPhone" class="form-label">Phone</label>
+                    <input type="tel" th:field="*{phone}" class="form-control" id="inputPhone"
+                           placeholder="48 111 222 333">
+                </div>
+                <div style="color: red" th:if="${#fields.hasAnyErrors()}">
+                    <ul>
+                        <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+                    </ul>
+                </div>
+                <div class="text-center">
+                    <button class="w-50 btn btn-lg btn-primary " type="submit" style="margin-top: 15px;">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>
+
+
+

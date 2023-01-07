@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="CRM"/>
+    <meta name="author" content="Vorkov"/>
+    <title>Order</title>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/styles/styles.css" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar-->
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">Customer Relationship Management</div>
+        <div class="list-group list-group-flush">
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/orders/new}">Create
+                new order</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/orders}">Orders</a>
+
+            <a sec:authorize="hasRole('ROLE_MANAGER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/orders/byUser}">My Orders</a>
+
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/projects/new}">Create
+                new project</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3"
+               th:href="@{/projects}">Projects</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/items/new}">Create
+                new item</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/items}">Items</a>
+
+            <a sec:authorize="hasRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/users}">Users</a>
+
+            <a sec:authorize="hasRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3"
+               th:href="@{/user-project/assign}">Assign user to project</a>
+
+            <a sec:authorize="hasRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3"
+               th:href="@{/user-project/release}">Release user from project</a>
+        </div>
+    </div>
+
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper">
+        <!-- Top navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <button class="btn btn-primary" id="sidebarToggle">Menu</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                        <li class="nav-item active"><a class="nav-link" href="../..">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/users/profile">View my profile</a>
+                                <div class="dropdown-divider"></div>
+                                <form th:action="@{/logout}" th:method="post">
+                                    <input type="submit" class="dropdown-item" value="Logout"/>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page content-->
+        <div class="container-fluid">
+            <br>
+            <h2 class="mt-5, text-center" th:text="Order+' '+${orderDTO.id}"> Order </h2>
+            <hr>
+        </div>
+        <div class="banner">
+            <div class="container text-left">
+                <div class="row">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Order Name</th>
+                            <th>Order Date</th>
+                            <th>Estimated Delivery Date</th>
+                            <th>Actual Delivery Date</th>
+                            <th>Project</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th th:text="${orderDTO.id}">Id</th>
+                            <td th:text="${orderDTO.name}">Name</td>
+                            <td th:text="${orderDTO.orderDate}">Order Date</td>
+                            <td th:text="${orderDTO.estimatedDeliveryDate}">Order Date</td>
+                            <td th:text="${orderDTO.actualDeliveryDate}">Order Date</td>
+                            <td th:text="${orderDTO.project.name}">Project</td>
+                            <td th:text="${orderDTO.status}">Status</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div >
+                        <div class=" text-center">
+                        <a sec:authorize="hasAnyRole('ROLE_ADMIN','SUPPLIER')" th:href="@{/orders/{path}/edit(path=${orderDTO.id})}"
+                           class="w-30 btn btn-lg btn-primary text-center" style="margin-top: 5px;">
+                            <i class="fa fa-arrow-circle-o-left"></i>&nbsp;Edit order <b th:text="${orderDTO.id}"></b></a>
+                        </div>
+                        <div class=" text-left">
+                            <a th:href="@{/orders/{path}/log(path=${orderDTO.id})}"
+                               class="w-30 btn btn-lg btn-primary text-center" style="margin-top: 5px;">
+                                <i class="fa fa-arrow-circle-o-left"></i>&nbsp;View order log</a>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')" class="container-fluid text-end">
+                        <form th:method="delete" th:action="@{/orders/{path}(path=${orderDTO.id})}">
+                            <input class="w-30 btn btn-lg btn-danger text-center" style="margin-top: 5px;" type="submit"
+                                   value="Delete order">
+                        </form>
+                    </div>
+                    <br>
+
+                    <div th:if="${orderDTO.items.isEmpty()}" class="container-fluid">
+                        <h2 class="mt-5, text-center" th:text="'Order ' + ${orderDTO.id} + ' has no items yet'">
+                            Items </h2>
+                    </div>
+
+                    <div th:unless="${orderDTO.items.isEmpty()}" class="container-fluid">
+                        <h2 class="mt-5, text-center" th:text="'Items' + ' of order ' + ${orderDTO.id}"> Items </h2>
+                        <hr>
+
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Item name</th>
+                                <th>Unit measurement</th>
+                                <th>Amount</th>
+                                <th>Requirement Delivery Date</th>
+                                <th>Estimated Delivery Date</th>
+                                <th>ActualDeliveryDate</th>
+                                <th>Notes</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item, ite : ${orderDTO.getItems()}">
+                                <td th:text="${item.id}">Id</td>
+                                <td><a th:text="${item.itemName}" th:href="@{/items/{path}(path=${item.id})}"></a></td>
+                                <td th:text="${item.unitMeasurement}">Order Date</td>
+                                <td th:text="${item.amount}">Project</td>
+                                <td th:text="${item.requirementDeliveryDate}">Requirement Delivery Date</td>
+                                <td th:text="${item.estimatedDeliveryDate}">Estimated Delivery Date</td>
+                                <td th:text="${item.actualDeliveryDate}">ActualDeliveryDate</td>
+                                <td th:text="${item.notes}">Notes</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container-fluid text-center">
+                <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" th:href="@{/items/newByOrder/{path}(path=${orderDTO.id})}"
+                   class="w-30 btn btn-lg btn-primary text-center" style="margin-top: 5px;">
+                    <i class="fa fa-arrow-circle-o-left"></i>&nbsp;Add item to order <b th:text="${orderDTO.id}"></b></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/script_menu.js"></script>
+
+</html>

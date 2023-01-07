@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="CRM"/>
+    <meta name="author" content="Vorkov"/>
+    <title>Update Item</title>
+    <link href="/styles/styles.css" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar-->
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">Customer Relationship Management</div>
+        <div class="list-group list-group-flush">
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/orders/new}">Create
+                new order</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/orders}">Orders</a>
+
+            <a sec:authorize="hasRole('ROLE_MANAGER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/orders/byUser}">My Orders</a>
+
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/projects/new}">Create
+                new project</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3"
+               th:href="@{/projects}">Projects</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/items/new}">Create
+                new item</a>
+
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_SUPPLIER')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/items}">Items</a>
+
+            <a sec:authorize="hasRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/users}">Users</a>
+
+            <a sec:authorize="hasRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3"
+               th:href="@{/user-project/assign}">Assign user to project</a>
+
+            <a sec:authorize="hasRole('ROLE_ADMIN')"
+               class="list-group-item list-group-item-action list-group-item-light p-3"
+               th:href="@{/user-project/release}">Release user from project</a>
+        </div>
+    </div>
+
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper">
+        <!-- Top navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <button class="btn btn-primary" id="sidebarToggle">Menu</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                        <li class="nav-item active"><a class="nav-link" href="../..">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/users/profile">View my profile</a>
+                                <div class="dropdown-divider"></div>
+                                <form th:action="@{/logout}" th:method="post">
+                                    <input type="submit" class="dropdown-item" value="Logout"/>
+                                </form>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page content-->
+        <div class="container-fluid">
+            <br>
+            <h2 class="mt-5, text-center">Edit item</h2>
+            <hr>
+        </div>
+        <div class="banner">
+            <div class="container">
+                <div class="row text-center">
+                    <form class="row g-6" th:method="patch" th:action="@{/items/{path}(path=${itemDTO.id})}" th:object="${itemDTO}">
+                        <table class="">
+                            <thead class="">
+                            <tr>
+                                <th></th>
+                                <th>Item name</th>
+                                <th>Unit Measurement</th>
+                                <th>Amount</th>
+                                <th>Requirement Delivery Date</th>
+                                <th>Estimated delivery date</th>
+                                <th>Actual delivery date</th>
+                                <th></th>
+                                <th>Notes</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <td>
+                                <div class="col">
+                                    <input type="hidden" th:field="*{id}" class="form-control " id="id"
+                                           placeholder="Id">
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col">
+                                    <input type="text" th:field="*{itemName}" class="form-control "
+                                    id="name" placeholder="Item name">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col">
+                                    <input type="text" th:field="*{unitMeasurement}" class="form-control "
+                                    id="unit" placeholder="Unit">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col">
+                                    <input type="text" th:field="*{amount}" class="form-control "
+                                    id="amount" placeholder="Amount">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col">
+                                    <input type="text" th:field="*{requirementDeliveryDate}" class="form-control "
+                                    id="rDate" placeholder="01.01.2000">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col">
+                                    <input type="text" th:field="*{estimatedDeliveryDate}" class="form-control"
+                                    id="inputEstDate" placeholder="01.01.2000">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col">
+                                    <input type="text" th:field="*{actualDeliveryDate}" class="form-control"
+                                    id="inputActDate" placeholder="01.01.2000">
+                                </div>
+                            </td>
+                            <td>
+                            <td>
+                                <div class="col">
+                                    <input type="text" th:field="*{notes}" class="form-control "
+                                    id="notes" placeholder="Notes">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col">
+                                    <input type="hidden" th:field="*{order.id}" class="form-control "
+                                    id="order" placeholder="order">
+                                </div>
+                            </td>
+                            </tbody>
+                        </table>
+                        <div style="color: red" th:if="${#fields.hasAnyErrors()}">
+                            <ul>
+                                <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+                            </ul>
+                        </div>
+                        <div class="text-center">
+                            <button class="w-30 btn btn-lg btn-primary " type="submit" style="margin-top: 30px;">Update
+                                Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Core theme JS-->
+<script src="/js/script_menu.js"></script>
+</body>
+</html>
